@@ -14,12 +14,21 @@ function App() {
   const [isActive, setIsActive] = useState(false);
   const [wpm, setWpm] = useState(0);
   const [accuracy, setAccuracy] = useState(0);
+  const [wpm2, setWpm2] = useState(0);
   const str1 = "My mission may be futile. Perhaps I imagined the sighting. But the poignant call and the loon’s hesitant plunge persuaded me that I had, after all these years, found my grandmother. And this time I will not be diverted. This time I will honor my promise.";
   let str2 = "";
 
   function reset() {  //resets the timer
     setTimer(0);
     setIsActive(false);
+  }
+
+  function wpm2Calc(){
+    if (index === 0){
+      setWpm2(0);
+    } else {
+      setWpm2(Math.round(wpm * (accuracy/100)));
+    }
   }
 
   function accuracyCalc(){  //calculates accuracy
@@ -33,7 +42,7 @@ function App() {
   function wpmCalc(){   //calculates words per minute
     if (index === 0){
       setWpm(0);
-    } else if (index === str1.length){
+    } else if (index >= str1.length){
       setWpm(wpm);
     }
     else {
@@ -53,6 +62,7 @@ function App() {
     }
     wpmCalc();
     accuracyCalc();
+    wpm2Calc();
     return () => clearInterval(interval);
   }, [isActive, timer]);
 
@@ -140,8 +150,9 @@ function App() {
       <p>Mistake counter: {mistakeCounter}</p> */}
       {/* <p>index: {index}</p> */}
       {/* <p>Timer: {timer} </p> */}
-      <p>WPM: {wpm}</p>
+      <p>Raw WPM: {wpm}</p>
       <p>Accuracy: {accuracy}%</p>
+      <p>Calculated WPM: {wpm2}</p>
       </header>
     </div>
   );
