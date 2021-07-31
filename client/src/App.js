@@ -2,6 +2,8 @@ import './App.css';
 import useKeyPress from './useKeyPress';
 import { useState, useEffect } from "react";
 import axios from "axios";
+import { GoogleLogin } from 'react-google-login';
+import Popup from 'reactjs-popup';
 
 function App() {
  
@@ -17,19 +19,32 @@ function App() {
   const [accuracy, setAccuracy] = useState(0);
   const [wpm2, setWpm2] = useState(0);
   const [name, setName] = useState('');
-  const [ifSend, setIfSend] = useState(false);
-  // const [names, setNames] = useState([]);
-  const str1 = "My mission may be futile. Perhaps I imagined the sighting. But the poignant call and the loon's hesitant plunge persuaded me that I had, after all these years, found my grandmother. And this time I will not be diverted. This time I will honor my promise.";
-  let str2 = "";
+  const [send, setSend]= useState(true);
+  const [isFocused, setIsFocused] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [gleId, setGleId] = useState('');
+  const [username, setUsername] = useState('');
   
+  const str1 = "My mission may be futile.";
+  let str2 = "";
   function reset() {  //resets the timer
     setTimer(0);
     setIsActive(false);
   }
 
+  function getData(){ //add parameter
+    axios.get(`http://localhost:3001/LeaderBoard/${gleId}`, {} )
+    .then((res) => {
+      console.log(res.data);
+    }, (error) => {
+      console.log(error);
+    });
+  }
+
   function sendData(){
-    if (ifSend){
-      axios.post(`http://localhost:3001/username/${name}/wpm/${wpm}`, {})
+    if (send === true){
+      console.log(send);  
+      axios.post(`http://localhost:3001/UserScore/${gleId}/${wpm}`, {})
       .then((res) => {
         console.log(res);
       }, (error) => {
@@ -61,7 +76,8 @@ function App() {
       setWpm(0);
     } else if (index >= str1.length){
       setWpm(wpm);
-      setIfSend(true);  //change this 
+      sendData();
+      setSend(false);   
     }
     else {
       setWpm(Math.round((index/5)/(timer/60)));
@@ -81,7 +97,7 @@ function App() {
     wpmCalc();
     accuracyCalc();
     wpm2Calc();
-    sendData();
+    // sendData();
     return () => clearInterval(interval);
   }, [isActive, timer]);
 
@@ -98,7 +114,7 @@ function App() {
     str2 += "<h4>";
     for (var i = 0; i < str1.length; i++){
       var c = str1.charAt(i);
-      if (c == " "){
+      if (c === " "){
         if (i === isRight.length){
           str2 += "<u>" + c + "</u>";
         } else {
@@ -125,29 +141,33 @@ function App() {
   }
 
   useKeyPress(key => {    //keyPress hook in charge of keeping track of every key entered and checking to see if it matches the particular index in the string
-    if (key === "Backspace") {
-      setKeys(keys.splice(0,keys.length-1));
-      setIsRight(isRight.splice(0,isRight.length-1));
-      setCorrectCounter(correctCounter => correctCounter-1);
-      if (index > 0) {
-        setIndex(index => index-1);
-      }
-    } else if (key === "~"){
-      resetWord();
-    } else {
-      setIsActive(true);
-      setKeys(keys.concat(key));
-      setIndex(index => index+1);
-      {printString()};
-      if (key === str1.charAt(index)){
-        setCorrectCounter(correctCounter => correctCounter+1);
-        setIsRight(isRight => isRight.concat(true));
+    if (!isFocused) {
+      if (key === "Backspace") {
+        setKeys(keys.splice(0,keys.length-1));
+        setIsRight(isRight.splice(0,isRight.length-1));
+        setCorrectCounter(correctCounter => correctCounter-1);
+        if (index > 0) {
+          setIndex(index => index-1);
+        }
+      } else if (key === "~"){
+        resetWord();
       } else {
-        setMistakeCounter(mistakeCounter => mistakeCounter+1);
-        setIsRight(isRight => isRight.concat(false)); //atomic operation
+        setIsActive(true);
+        setKeys(keys.concat(key));
+        setIndex(index => index+1);
+        // {printString()};
+        if (key === str1.charAt(index)){
+          setCorrectCounter(correctCounter => correctCounter+1);
+          setIsRight(isRight => isRight.concat(true));
+        } else {
+          setMistakeCounter(mistakeCounter => mistakeCounter+1);
+          setIsRight(isRight => isRight.concat(false)); //atomic operation
+        }
       }
     }
   })
+
+  //use effect to make it when the gleId changes, it searches the UserData db to see if a name goes with it, and assigns it if it does. and makes the name submit bar go away. 
 
   function resetWord(){    //resets everything every time ~ is pressed
     setKeys([]);
@@ -156,7 +176,7 @@ function App() {
     setIndex(0);
     setIsRight([]);
     reset();
-    // setNames([]);
+    setSend(true)
   }
 
   function printString(){   //prints the string and gets right of html elements
@@ -165,28 +185,87 @@ function App() {
 
   const nameSub = (e) => {
     if (e.key === "Enter"){
-      // setNames(names.concat(name));
-      // setName("");
       console.log(name);
     }
   }
 
-  const onInputChange = e => {
-    setName(e.target.value);
+  // const onInputChange = e => {
+  //   setName(e.target.value);
+  // }
+
+  const responseSuccessGoogle = (response) => {
+    setIsLoggedIn(true);
+    setGleId(response.Os.$R);
+    console.log(response.Os.$R);
+    console.log(response);
+  }
+  //make post request and push token to backend
+  const responseFailureGoogle = (response) => {
+    console.log(response);
   }
 
+  const handleSubmit = (e) => {
+    setUsername(name);
+    setName('');
+    e.preventDefault(); 
+    console.log(`Form submitted, ${name}`);
+    //search collection for username, if it passes dont add and alert it exists, if it fails add
+    //trigger another popup saying that username cannot be changed (or just make the name submission disappear) (or make it so when a person logs in, the username is auto saved)
+    axios.get(`http://localhost:3001/UsernameCheck/${name}`, {})
+      .then((res) => {
+        if(res.data.length === 0){
+          axios.post(`http://localhost:3001/UserData/${name}/${gleId}`, {})
+          .then((res) => {
+            console.log(res);
+          }, (error) => {
+            console.log(error);
+          });
+        } else {
+          {triggerPopup()}
+        }
+        console.log(res.data);
+      }, (error) => {
+          console.log(error);
+        })
+          
+    
+    function triggerPopup(){
+      console.log('exist')
+      document.getElementById("modalButton").click();
+    }
+
+    // axios.post(`http://localhost:3001/UserData/${name}/${gleId}`, {})
+    //   .then((res) => {
+    //     console.log(res);
+
+    //   }, (error) => {
+    //     console.log(error);
+    //   });
+  }
+  
   return (
     <div className="Typing-Test">
+      <GoogleLogin  className = 'google'
+        clientId="565884375585-2jpdbc390b42n87ig0c9vodu7tdgpdbf.apps.googleusercontent.com"
+        buttonText="Login"
+        onSuccess={responseSuccessGoogle}
+        onFailure={responseFailureGoogle}
+        cookiePolicy={'single_host_origin'}
+      />
       <header className="Content">
+      <Popup trigger={<button className='invisible' id="modalButton"></button>} position="right center">
+        <div>The username {name} already exists, choose another one</div>
+      </Popup>
+      <form onSubmit = {handleSubmit}>
+        <input onChange = {(e) => setName(e.target.value)} value = {name} onBlur={() => setIsFocused(false)} onFocus={() => setIsFocused(true)}></input>
+        <button type = 'submit'>Click to submit</button>
+      </form>
         {printString()} 
-      {/* <p>Correct counter: {correctCounter}</p>
-      <p>Mistake counter: {mistakeCounter}</p> */}
-      {/* <p>index: {index}</p> */}
-      {/* <p>Timer: {timer} </p> */}
       <p>Raw WPM: {wpm}</p>
       <p>Accuracy: {accuracy}%</p>
       <p>Calculated WPM: {wpm2}</p>
-      <input type="text" value = {name} onKeyPress = {nameSub} onChange={onInputChange}/>
+      <p>Username: {username}</p>
+      <button onClick={getData}>Personal Leaderboard</button>
       </header>
       
     </div>
