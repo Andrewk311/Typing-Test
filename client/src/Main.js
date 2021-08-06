@@ -15,7 +15,7 @@ function Main() {
                       App
                   </Link>
                   <Link to='/LeaderBoard' style={{ padding: 10 }}>
-                      LeaderBoard
+                      Leaderboard
                   </Link>
                   <Link to='/Profile' style={{ padding: 10 }}>
                       Profile

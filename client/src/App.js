@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { GoogleLogin } from 'react-google-login';
 import Popup from 'reactjs-popup';
+import Cookies from 'universal-cookie';
 
 function App() {
  
@@ -24,9 +25,12 @@ function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [gleId, setGleId] = useState('');
   const [username, setUsername] = useState('');
-  
+  const cookies = new Cookies();
+
   const str1 = "My mission may be futile.";
   let str2 = "";
+
+
   function reset() {  //resets the timer
     setTimer(0);
     setIsActive(false);
@@ -183,31 +187,17 @@ function App() {
     return <h4 dangerouslySetInnerHTML={{__html: str, }}/> ;
   }
 
-  const nameSub = (e) => {
-    if (e.key === "Enter"){
-      console.log(name);
-    }
-  }
-
-  // const onInputChange = e => {
-  //   setName(e.target.value);
+  // const nameSub = (e) => {
+  //   if (e.key === "Enter"){
+  //     console.log(name);
+  //   }
   // }
-
-  const responseSuccessGoogle = (response) => {
-    setIsLoggedIn(true);
-    setGleId(response.Os.$R);
-    console.log(response.Os.$R);
-    console.log(response);
-  }
-  //make post request and push token to backend
-  const responseFailureGoogle = (response) => {
-    console.log(response);
-  }
 
   const handleSubmit = (e) => {
     setUsername(name);
     setName('');
     e.preventDefault(); 
+    //i want to get rid of the textbox after this is pressed(if the name is valid)
     console.log(`Form submitted, ${name}`);
     //search collection for username, if it passes dont add and alert it exists, if it fails add
     //trigger another popup saying that username cannot be changed (or just make the name submission disappear) (or make it so when a person logs in, the username is auto saved)
@@ -227,47 +217,141 @@ function App() {
       }, (error) => {
           console.log(error);
         })
-          
-    
-    function triggerPopup(){
-      console.log('exist')
-      document.getElementById("modalButton").click();
-    }
-
-    // axios.post(`http://localhost:3001/UserData/${name}/${gleId}`, {})
-    //   .then((res) => {
-    //     console.log(res);
-
-    //   }, (error) => {
-    //     console.log(error);
-    //   });
   }
-  
+
+  function triggerPopup(){
+    console.log('exist')
+    document.getElementById("modalButton").click();
+    
+  }
+
+  const responseSuccessGoogle = (response) => {
+    // displayName();
+    setIsLoggedIn(true);
+    setGleId(response.Os.$R);
+    cookies.set('gleId', response.Os.$R, { path: '/' });
+    console.log(response.Os.$R);
+    console.log(response);
+  }
+  //make post request and push token to backend
+  const responseFailureGoogle = (response) => {
+    console.log(response);
+  }
+  //bugs with this: running twice and when switching pages, the login in state resets
+  const googleLogin = () => {
+    return(
+      <GoogleLogin  className = 'google'
+      clientId="565884375585-2jpdbc390b42n87ig0c9vodu7tdgpdbf.apps.googleusercontent.com"
+      buttonText="Login"
+      onSuccess={responseSuccessGoogle}
+      onFailure={responseFailureGoogle}
+      cookiePolicy={'single_host_origin'}
+    />
+    );
+  }
+
+  function clickLogout(){
+    cookies.set('gleId', '', { path: '/' });
+    setIsLoggedIn(false);
+    setGleId('');
+    setUsername('');
+  }
+
+  const googleLogout = () => {
+    // console.log('logout')
+    // console.log(isLoggedIn)
+    return(
+      <div>
+      <button className="Logout" onClick={() => clickLogout()}>Log Out</button>
+      </div>
+    );
+  }
+  //gleid doesnt save when going back to home page
+  function checkLogin(){
+    setGleId(cookies.get('gleId'));
+    // console.log(cookies.get('gleId'));
+    displayName();
+    if((cookies.get('gleId') + "").length != 0){
+      // console.log('the length is greater than 0')
+      setIsLoggedIn(true);
+      // displayName();
+    } else {
+      setIsLoggedIn(false);
+    }
+  }
+
+  useEffect(() => {   
+    checkLogin();
+  });
+
+  //if gleid lookup returns a username, keep the name input invisible. if it returns nothing, create the username field then search again. 
+  function nameInput(){
+    if (isLoggedIn){
+      if(username === undefined){
+        return(
+          <div>
+             {Modal}
+          <form onSubmit = {handleSubmit}> 
+            <input onChange = {(e) => setName(e.target.value)} value = {name} onBlur={() => setIsFocused(false)} onFocus={() => setIsFocused(true)}></input>
+            <button type = 'submit'>Click to submit</button>
+          </form>
+          </div>
+        );
+      }
+    }  
+  }
+
+  const Modal = () => (
+    <Popup
+      trigger={<button className="invisible" id="modalButton"></button>} position="right center">
+        <div>The username {name} already exists, choose another one</div>
+    </Popup>
+  );
+
+  // function displayName(){
+  //   axios.get(`http://localhost:3001/findUser/${gleId}`, {})
+  //   .then((res) => {
+  //     console.log(res);
+  //   }, (error) => {
+  //     console.log(error);
+  //   });
+  // }
+
+  async function displayName(){
+    let res = await axios.get(`http://localhost:3001/findUser/${gleId}`)
+    // console.log(res.data.username);
+    setUsername(res.data.username);
+    // console.log(name);
+}
+
+  //put google login into a function and call {GoogleLogin} && {isLoggedIn} to make button dissappear when logged in!!
   return (
     <div className="Typing-Test">
-      <GoogleLogin  className = 'google'
-        clientId="565884375585-2jpdbc390b42n87ig0c9vodu7tdgpdbf.apps.googleusercontent.com"
-        buttonText="Login"
-        onSuccess={responseSuccessGoogle}
-        onFailure={responseFailureGoogle}
-        cookiePolicy={'single_host_origin'}
-      />
+      <section>
+        {!isLoggedIn && googleLogin()}
+        {isLoggedIn && googleLogout()}
+        {gleId}
+        
+      </section>
       <header className="Content">
-      <Popup trigger={<button className='invisible' id="modalButton"></button>} position="right center">
-        <div>The username {name} already exists, choose another one</div>
-      </Popup>
-      <form onSubmit = {handleSubmit}>
-        <input onChange = {(e) => setName(e.target.value)} value = {name} onBlur={() => setIsFocused(false)} onFocus={() => setIsFocused(true)}></input>
-        <button type = 'submit'>Click to submit</button>
-      </form>
+        <Popup
+          trigger={<button className="invisible" id="modalButton"></button>} position="right center">
+          <div>The username {name} already exists, choose another one</div>
+        </Popup>
+      {/* <form onSubmit = {handleSubmit}>
+            <input onChange = {(e) => setName(e.target.value)} value = {name} onBlur={() => setIsFocused(false)} onFocus={() => setIsFocused(true)}></input>
+            <button type = 'submit'>Click to submit</button>
+          </form> */}
+        {/* {nameInput() && isLoggedIn} */}
+        {nameInput()}
         {printString()} 
-      <p>Raw WPM: {wpm}</p>
-      <p>Accuracy: {accuracy}%</p>
-      <p>Calculated WPM: {wpm2}</p>
-      <p>Username: {username}</p>
-      <button onClick={getData}>Personal Leaderboard</button>
+        <p>Raw WPM: {wpm}</p>
+        <p>Accuracy: {accuracy}%</p>
+        <p>Calculated WPM: {wpm2}</p>
+        <p>Username: {username}</p>
+        <button onClick={() => console.log(isLoggedIn)}>Button</button>
+        <button onClick={() => console.log(username)}>Button2</button>
       </header>
-      
     </div>
   );
 }

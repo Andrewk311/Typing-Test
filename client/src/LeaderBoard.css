@@ -1,3 +1,13 @@
 .leaderboard{
     background-color: #e2e1e1;
 }
+
+.Table{
+    width: 70%;
+}
+
+.Box {
+    display:flex; 
+    flex-direction: "row";
+    justify-content: "center";
+}

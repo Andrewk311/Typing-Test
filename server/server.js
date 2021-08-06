@@ -25,6 +25,7 @@ mongoose.set('useFindAndModify', false);
 mongoose.set('useCreateIndex', true);
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
+//adds gled and wpm to database
 app.post('/UserScore/:gleId/:wpmId', (req, res) => {
     res.send('POST request')
     console.log('hello there')
@@ -38,8 +39,9 @@ app.post('/UserScore/:gleId/:wpmId', (req, res) => {
 
 // app.use('/:gleId/:wpmId', userscores);
 
+//find username given gleId
 app.get('/findUser/:gleId', (req,res) => {
-    UserData.find({'gleId' : req.params.gleId}, 'username', function(err, result){
+    UserData.findOne({'gleId' : req.params.gleId}, 'username', function(err, result){
         if (err) {
             res.send(err);
         } else {
@@ -47,20 +49,37 @@ app.get('/findUser/:gleId', (req,res) => {
         }
     });
 });
+//personal leaderboard
+// app.get('/Profile/:gleId', (req, res) => {
+//     UserScores.find({'gleId' : req.params.gleId}, 'wpm', function(err, result){
+//         if (err) {
+//             res.send(err);
+//         } else {
+//             res.send(result);
+//         }
+//     });
+// });
 
-app.get('/Leaderboard/:gleId', (req, res) => {
-    UserScores.find({'gleId' : req.params.gleId}, 'wpm', function(err, result){
-        if (err) {
+//personal leaderboard
+app.get('/Profile/:gleId', (req, res) => {
+    var query = UserScores.find({'gleId' : req.params.gleId});
+    query.select('wpm _id');
+    query.limit(10);
+    query.sort({ wpm: -1 });
+
+    query.exec(function (err, result){
+        if(err) {
             res.send(err);
         } else {
             res.send(result);
         }
-    });
-});
+    })
+})
+
 //Leaderboard for top scores
 app.get('/Leaderboard', (req, res) => {
     var query = UserScores.find({});
-    query.select('gleId wpm');
+    query.select('gleId wpm _id');
     query.limit(10);
     query.sort({ wpm : -1 });
     
@@ -73,18 +92,8 @@ app.get('/Leaderboard', (req, res) => {
     })
 });
 
-app.get('gleIdCheck/:gleId', (req, res) => {
-    UserData.find({'gleId' : req.params.gleId}, 'username', function(err, result){
-        if (err) {
-            res.send(err);
-        } else {
-            res.send(result);
-        }
-    });
-});
-
+//gets gleid of a specific username
 app.get('/UsernameCheck/:nameId', (req, res) => {
-    console.log(req.params.nameId)
     UserData.find({'username' : req.params.nameId}, 'gleId', function(err, result){
         if (err) {
             res.send(err);
@@ -94,7 +103,7 @@ app.get('/UsernameCheck/:nameId', (req, res) => {
     });
 });
 
-//it is adding this to the wrong collection, why
+//adds username and gleid to db 
 app.post('/UserData/:nameId/:gleId', (req, res) => {
     console.log("IM HERE")
     res.send('POST request')
