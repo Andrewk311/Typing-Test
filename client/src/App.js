@@ -27,9 +27,22 @@ function App() {
   const [username, setUsername] = useState('');
   const cookies = new Cookies();
 
-  const str1 = "My mission may be futile.";
+  
+  const strArray = ['He comes to me in pieces as I watch the stillness of space, envisioning new constellations in the array of unrecognized stars. I trace the sparks of light with my finger, connecting the dots and smudging the glass as a result.  How many stars do you think there are in space? I imagine him asking. Can there really be other ones out there as big as or even bigger than the sun? I always admired his genuine curiosity, how he viewed things with a particular interest, how he saw me.',
+  'I saw a tree and thought of you, or rather, thought of the way you see trees. I remembered when we walked through the Ramble in Central Park, a wild place in the center of a place wilder still, resplendent and emerald in the early summer sun. You stopped suddenly when you saw it. I remember how you cocked your head in appreciation, a tendril of hair escaped from behind your ear. You brushed it back with an unconscious hand. There it is, you said, with such earnest excitement that I could not help but feel I was missing something exceptional. I was, as it turns out.', 
+  'I often think about the useless rooms now, and what they are, and I think the house is one big brain, mine only to think and feel as I please. I gave the living room chair away to charity. I never wanted to sit in it again. Each room is like a lobe of my mind, and I have no photos of you up on the walls. The wallpapers underneath where they used to hang are a little lighter and fresher, and I ask people to take pictures of me when we go out, when I holiday with friends, at family events, dates.', 
+  'I used to get up so early. Some days I would go outside and watch the sunrise, warming my hands with a mug of herbal tea. The world was quiet, but not still. I admired the people moving about the streets, getting an early start. We had something in common, they and I. We all knew the feeling of the first light of day rising over the mountains and hitting our faces. We carried that feeling with us throughout the day, like a token. But I have not seen them, those people of the sun, for months now.', 
+  'When I was a child I believed that in winter, as water froze, the fishes froze with it. I looked at the icy lakes and streams with curiosity, wondering how the fish survived. I mentioned this once to my mother, who smiled and told me that it is only the surface that freezes and not the fish. The ice forms a windowpane against the world, she told me. I could never decide which seemed worse, to be frozen or isolated. Now I feel that I am both, and it has been a long winter. I am unable to move.', 
+  'Imagine how hard it is to break up asphalt with a pickaxe. Now imagine it is not even a very good pickaxe. And you have been doing it for days. The sun, hotter now, makes the sweat bead on your face, itchy like a bug landing on you. Sometimes enough water escapes your pores to form a little stream that carves a path down the black dust on your face. And it tortures you that your body is letting such a precious resource just drip onto the ground. This has been my existence for almost a full moon.',
+  'Every time I put down my pickaxe, I feel the fear. The fear that I will not finish in time. That I will be so close but that it will be too late. I imagine being able to see the finish line and then getting word that it is too late. And that the finish line has moved or disappeared. And if I’d only kept going and not took that break, if I had swung a little harder, shoveled a little faster, I would have made it. And our lives could have begun. So, I pick up the pickaxe. Lift it and let it fall. I have to sleep soon.',
+  'I am close now. The resting may have actually done me good and I am making progress. I plead with the monks to let me work more of the day. I contemplate sneaking out at night but can not risk censure. I can not be sent back when I am this close to finishing my plot. I can taste more than just the dust of the asphalt now. I can taste the paradise, it is so close to being ours. I can taste my wife. I fantasize about her lips and her skin and her belly, almost not seeing the black pavement I am ripping up, just feeling my arms lift and lower as my eyes see only her face.']
+   
+  const [str1, setStr1] = useState(strArray[parseInt((strArray.length - 1) * Math.random())]);
   let str2 = "";
 
+  function randomPhrase(){
+    setStr1(strArray[Math.floor(Math.random()*strArray.length)]);
+  }
 
   function reset() {  //resets the timer
     setTimer(0);
@@ -174,14 +187,17 @@ function App() {
   //use effect to make it when the gleId changes, it searches the UserData db to see if a name goes with it, and assigns it if it does. and makes the name submit bar go away. 
 
   function resetWord(){    //resets everything every time ~ is pressed
+    randomPhrase();
     setKeys([]);
     setMistakeCounter(0);
     setCorrectCounter(0);
     setIndex(0);
     setIsRight([]);
     reset();
-    setSend(true)
+    setSend(true);
   }
+
+  //when resetting the test after something is typed, it takes 2 clicks to get rid of it all. 
 
   function printString(){   //prints the string and gets right of html elements
     return <h4 dangerouslySetInnerHTML={{__html: str, }}/> ;
@@ -197,6 +213,7 @@ function App() {
     setUsername(name);
     setName('');
     e.preventDefault(); 
+    displayName();
     //i want to get rid of the textbox after this is pressed(if the name is valid)
     console.log(`Form submitted, ${name}`);
     //search collection for username, if it passes dont add and alert it exists, if it fails add
@@ -284,6 +301,12 @@ function App() {
     checkLogin();
   });
 
+  useEffect(() => {
+    randomPhrase();
+  }, [])
+
+  
+
   //if gleid lookup returns a username, keep the name input invisible. if it returns nothing, create the username field then search again. 
   function nameInput(){
     if (isLoggedIn){
@@ -307,15 +330,6 @@ function App() {
         <div>The username {name} already exists, choose another one</div>
     </Popup>
   );
-
-  // function displayName(){
-  //   axios.get(`http://localhost:3001/findUser/${gleId}`, {})
-  //   .then((res) => {
-  //     console.log(res);
-  //   }, (error) => {
-  //     console.log(error);
-  //   });
-  // }
 
   async function displayName(){
     let res = await axios.get(`http://localhost:3001/findUser/${gleId}`)
