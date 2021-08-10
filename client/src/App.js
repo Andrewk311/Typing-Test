@@ -200,7 +200,7 @@ function App() {
   //when resetting the test after something is typed, it takes 2 clicks to get rid of it all. 
 
   function printString(){   //prints the string and gets right of html elements
-    return <h4 dangerouslySetInnerHTML={{__html: str, }}/> ;
+    return <h4 className="Text" dangerouslySetInnerHTML={{__html: str, }}/> ;
   }
 
   // const nameSub = (e) => {
@@ -345,13 +345,18 @@ function App() {
         {!isLoggedIn && googleLogin()}
         {isLoggedIn && googleLogout()}
         {gleId}
+        <p>{username}</p>
         
       </section>
+      <p>Raw WPM: {wpm}</p>
+      <p>Accuracy: {accuracy}%</p>
+      <p>Calculated WPM: {wpm2}</p>
       <header className="Content">
         <Popup
           trigger={<button className="invisible" id="modalButton"></button>} position="right center">
           <div>The username {name} already exists, choose another one</div>
         </Popup>
+        
       {/* <form onSubmit = {handleSubmit}>
             <input onChange = {(e) => setName(e.target.value)} value = {name} onBlur={() => setIsFocused(false)} onFocus={() => setIsFocused(true)}></input>
             <button type = 'submit'>Click to submit</button>
@@ -359,10 +364,8 @@ function App() {
         {/* {nameInput() && isLoggedIn} */}
         {nameInput()}
         {printString()} 
-        <p>Raw WPM: {wpm}</p>
-        <p>Accuracy: {accuracy}%</p>
-        <p>Calculated WPM: {wpm2}</p>
-        <p>Username: {username}</p>
+        
+        
         <button onClick={() => console.log(isLoggedIn)}>Button</button>
         <button onClick={() => console.log(username)}>Button2</button>
       </header>

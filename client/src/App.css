@@ -1,10 +1,10 @@
 .Typing-Test {
-  background-color: #e2e1e1;
-  position: fixed; 
+  background-color: #ffffff;
+  /* position: fixed; 
   top:4%;
   right:0;
   left:0;
-  bottom:0;
+  bottom:0; */
 }
 
 .Content {
@@ -13,7 +13,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  /* justify-content: center; */
   font-size: calc(10px + 2vmin);
   color: rgb(0, 0, 0);
   /* position: fixed; 
@@ -21,6 +21,19 @@
   right:0;
   left:0;
   bottom:0; */
+}
+
+p {
+  border-style:solid;
+  border-width:thick;
+  padding:10px;
+}
+
+.Text{
+  border-style:solid;
+  border-width:thick;
+  padding:10px;
+  
 }
 
 h4 {
@@ -64,6 +77,11 @@ h4 {
 [data-popup='tooltip'].popup-overlay {
   background: transparent;
 }
+
+/* .Logout{
+
+} */
+
 
 /* .google{
   position:relative; 

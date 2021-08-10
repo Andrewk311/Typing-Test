@@ -61,8 +61,8 @@ export default function LeaderBoard() {
 
     function DisplayBoard() {
         return(
-            <Box className="Box" >
-               <TableContainer style={{width: 600, position:"fixed", left:640, top: 200}} className="Table" component={Paper}>
+            <Box className="Box" display="flex" flexDirection="row" justifyContent="center" >
+               <TableContainer style={{width: 600, position:"absolute"}} className="TableContainer" component={Paper}>
                     <Table  className="Table" aria-label="simple table">
                         <TableHead>
                         <TableRow>
@@ -89,7 +89,7 @@ export default function LeaderBoard() {
     return (
         <div className="leaderboard">
             {/* <button onClick={allTime}>Personal Leaderboard</button> */}
-            <h1 style={{position:"fixed", left:815, bottom:730}}>All Time Scores</h1>
+            <h1 className="Title">All Time Scores</h1>
             {showLeaderboard && DisplayBoard()}
         </div>
     )

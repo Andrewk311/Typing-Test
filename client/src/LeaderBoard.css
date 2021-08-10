@@ -1,13 +1,34 @@
 .leaderboard{
     background-color: #e2e1e1;
+    text-align: center;
+    margin: auto;
+    padding: 10%;
+    position: fixed; 
+    top:4%;
+    right:0;
+    left:0;
+    bottom:0;
 }
 
-.Table{
-    width: 70%;
+.Title{
+    position: fixed;
+    top: 10%;
+    right: 45%;
 }
 
-.Box {
+/* .TableContain{
+    width: 600;
+    position:"fixed"; 
+    left:640 ;
+    top: 200;
+} */
+
+/* .Box {
+    
+} */
+
+/* .Box {
     display:flex; 
     flex-direction: "row";
     justify-content: "center";
-}
+} */
