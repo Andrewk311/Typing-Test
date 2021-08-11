@@ -1,6 +1,5 @@
 .profile{
     background-image: url('./imgs/Paper-background.jpg');
-    /* background-color: #e2e1e1; */
     text-align: center;
     margin: auto;
     padding: 10%;
@@ -16,12 +15,6 @@
     top: -30%;
     align-content: center;
 }
-
-/* .Table{
-    position: relative; 
-    top: -25%; 
-    
-} */
 
 .Box{
     position: relative;

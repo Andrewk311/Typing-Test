@@ -1,6 +1,5 @@
 .leaderboard{
     background-image: url('./imgs/Paper-background.jpg');
-    /* background-color: #e2e1e1; */
     text-align: center;
     margin: auto;
     padding: 10%;
@@ -21,24 +20,3 @@
     position: relative;
     top: -20%;
 }
-
-/* .rows{
-    border-bottom: none;
-} */
-
-/* .TableContain{
-    width: 600;
-    position:"fixed"; 
-    left:640 ;
-    top: 200;
-} */
-
-/* .Box {
-    
-} */
-
-/* .Box {
-    display:flex; 
-    flex-direction: "row";
-    justify-content: "center";
-} */
