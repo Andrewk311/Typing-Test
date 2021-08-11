@@ -14,9 +14,9 @@ app.use(bodyParser.json({extended: true}));
 app.use(bodyParser.urlencoded({extended: true}));
 dotenv.config()
 
-app.use(express.static(path.resolve(__dirname, "./client/build")));
-app.get("*", function (request, response) {
-    response.sendFile(path.resolve(__dirname, "./client/build", "index.html"));
+app.use(express.static(path.join(__dirname, "client", "build")))
+app.get("*", (req, res) => {
+    res.sendFile(path.join(__dirname, "client", "build", "index.html"));
 });
 
 const CONNECTION_URL = `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@cluster0.jh8oz.mongodb.net/DataBase?retryWrites=true&w=majority`;
