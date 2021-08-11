@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const { UserScores, UserData } = require('./schema.js');
 const dotenv = require("dotenv")
+const path = require("path");
 
 const PORT = process.env.PORT || 3001; 
 const app = express();
@@ -12,6 +13,11 @@ app.use(cors())
 app.use(bodyParser.json({extended: true}));
 app.use(bodyParser.urlencoded({extended: true}));
 dotenv.config()
+
+app.use(express.static(path.resolve(__dirname, "./client/build")));
+app.get("*", function (request, response) {
+    response.sendFile(path.resolve(__dirname, "./client/build", "index.html"));
+});
 
 const CONNECTION_URL = `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@cluster0.jh8oz.mongodb.net/DataBase?retryWrites=true&w=majority`;
 
