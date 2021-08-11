@@ -1,20 +1,30 @@
 .leaderboard{
-    background-color: #e2e1e1;
+    background-image: url('./imgs/Paper-background.jpg');
+    /* background-color: #e2e1e1; */
     text-align: center;
     margin: auto;
     padding: 10%;
     position: fixed; 
-    top:4%;
+    top: 10%;
     right:0;
     left:0;
     bottom:0;
 }
 
 .Title{
-    position: fixed;
-    top: 10%;
-    right: 45%;
+    position: relative;
+    top: 40%;
+    align-content: center;
 }
+
+.Box{
+    position: relative;
+    top: -20%;
+}
+
+/* .rows{
+    border-bottom: none;
+} */
 
 /* .TableContain{
     width: 600;

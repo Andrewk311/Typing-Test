@@ -50,13 +50,13 @@ export default function Profile() {
 
     function DisplayBoard() {
         return(
-            <Box className="Box" >
-               <TableContainer style={{width: 600, position:"fixed", left:640, top: 200}} className="Table" component={Paper}>
-                    <Table  className="Table" aria-label="simple table">
+            <Box className="Box" display="flex" flexDirection="row" justifyContent="center" >
+               <TableContainer style={{width: 400}} className="Table" component={Paper}>
+                    <Table className="Table" aria-label="simple table">
                         <TableHead>
                         <TableRow>
                             <TableCell><b>Username</b></TableCell>
-                            <TableCell><b>WPM</b></TableCell>
+                            <TableCell style={{width:25}} ><b>WPM</b></TableCell>
                         </TableRow>
                         </TableHead>
                         <TableBody>
@@ -65,7 +65,7 @@ export default function Profile() {
                                     <TableCell component="th" scope="row">
                                     {row.username}
                                     </TableCell>
-                                    <TableCell >{row.wpm}</TableCell>
+                                    <TableCell style={{width:25}} >{row.wpm}</TableCell>
                             </TableRow>
                             ))}
                         </TableBody>
@@ -77,7 +77,7 @@ export default function Profile() {
 
     return (
         <div className="profile">
-            <h1 style={{position:"fixed", left:790, bottom:730}}>Personal Leaderboard</h1>
+            <h1 className="Title" >Personal Leaderboard</h1>
             {showLeaderboard && DisplayBoard()}
         </div>
     )

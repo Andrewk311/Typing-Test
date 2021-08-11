@@ -10,14 +10,14 @@ function Main() {
   return (
       <Router>
           <div className="header">
-              <nav style={{ margin: 10 }}>
-                  <Link to='/' style={{ padding: 10 }}>
+              <nav className="nav">
+                  <Link to='/' activeClassName="navbar__link--active" className="navbar__link">
                       App
                   </Link>
-                  <Link to='/LeaderBoard' style={{ padding: 10 }}>
+                  <Link to='/LeaderBoard' activeClassName="navbar__link--active" className="navbar__link">
                       Leaderboard
                   </Link>
-                  <Link to='/Profile' style={{ padding: 10 }}>
+                  <Link to='/Profile' activeClassName="navbar__link--active" className="navbar__link">
                       Profile
                   </Link>
               </nav>

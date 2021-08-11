@@ -1,3 +1,29 @@
 .profile{
-    background-color: #e2e1e1;
+    background-image: url('./imgs/Paper-background.jpg');
+    /* background-color: #e2e1e1; */
+    text-align: center;
+    margin: auto;
+    padding: 10%;
+    position: fixed; 
+    top: 10%;
+    right:0;
+    left:0;
+    bottom:0;
+}
+
+.Title{
+    position: relative;
+    top: -30%;
+    align-content: center;
+}
+
+/* .Table{
+    position: relative; 
+    top: -25%; 
+    
+} */
+
+.Box{
+    position: relative;
+    top: -20%;
 }

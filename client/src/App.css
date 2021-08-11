@@ -1,10 +1,11 @@
 .Typing-Test {
-  background-color: #ffffff;
-  /* position: fixed; 
-  top:4%;
+  background-image: url('./imgs/Paper-background.jpg');
+  /* background-color: #ffffff; */
+  position: fixed; 
+  top:10%;
   right:0;
   left:0;
-  bottom:0; */
+  bottom:0;
 }
 
 .Content {
@@ -23,36 +24,62 @@
   bottom:0; */
 }
 
-p {
+h2{
+  font-size: 2rem;
+  color: rgb(0, 0, 0);
+  text-align: center;
+  position: relative;
+  top: 90px;
+}
+
+.stats {
+  display:inline-block;
   border-style:solid;
   border-width:thick;
   padding:10px;
+  font-weight: bold;
+  background: white;
+  background-clip: padding-box;
+  position: relative; 
+  top: 30%;
+  left: 80%;
+  list-style-type: none;
 }
 
 .Text{
   border-style:solid;
   border-width:thick;
   padding:10px;
+  background: white;
+  background-clip: padding-box;
+  
+}
+
+.google{
+  position:fixed; 
+  top: 3%;
+  left: 2%;
+}
+
+.Logout{
+  position: fixed; 
+  top: 3%;
+  left:2%;
+  border-radius: 10%;
+  padding: .5%;
+}
+
+.Completed{
+  font-weight:bold;
+  position: relative; 
+  top: 32.5%;
+  left: 81.5%;
   
 }
 
 h4 {
-  /* display: inline-block;
-  border: 1px solid red;
-  padding: 100px; */
-
-  /* box-sizing: content-box;
-  width: 100%;
-  border: 1px solid red;
-  padding: 5px; */
-
   max-width: 960px;
-
 }
-
-/* .invisible {
-  display:none
-} */
 
 .popup-content {
   position: absolute;
@@ -77,19 +104,3 @@ h4 {
 [data-popup='tooltip'].popup-overlay {
   background: transparent;
 }
-
-/* .Logout{
-
-} */
-
-
-/* .google{
-  position:relative; 
-  left: 1792px; 
-  
-} */
-
-/* .Logout{
-  position: relative; 
-  left: 1000px;
-} */

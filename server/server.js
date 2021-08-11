@@ -3,8 +3,7 @@ let cors = require('cors')
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const { UserScores, UserData } = require('./schema.js');
-var userscores = require('./Routes/userScores.js');
-var userdata = require('./Routes/userData.js')
+const dotenv = require("dotenv")
 
 const PORT = process.env.PORT || 3001; 
 const app = express();
@@ -12,8 +11,9 @@ app.use(cors())
 
 app.use(bodyParser.json({extended: true}));
 app.use(bodyParser.urlencoded({extended: true}));
+dotenv.config()
 
-const CONNECTION_URL = 'mongodb+srv://Andrewk311:Andrewk311@cluster0.jh8oz.mongodb.net/DataBase?retryWrites=true&w=majority';
+const CONNECTION_URL = `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@cluster0.jh8oz.mongodb.net/DataBase?retryWrites=true&w=majority`;
 
 mongoose.connect(CONNECTION_URL, { useNewUrlParser: true, useUnifiedTopology: true})
     .then(() => app.listen(PORT, () => console.log(`Server running on port: ${PORT}`)))
@@ -37,8 +37,6 @@ app.post('/UserScore/:gleId/:wpmId', (req, res) => {
 });
 })
 
-// app.use('/:gleId/:wpmId', userscores);
-
 //find username given gleId
 app.get('/findUser/:gleId', (req,res) => {
     UserData.findOne({'gleId' : req.params.gleId}, 'username', function(err, result){
@@ -49,16 +47,6 @@ app.get('/findUser/:gleId', (req,res) => {
         }
     });
 });
-//personal leaderboard
-// app.get('/Profile/:gleId', (req, res) => {
-//     UserScores.find({'gleId' : req.params.gleId}, 'wpm', function(err, result){
-//         if (err) {
-//             res.send(err);
-//         } else {
-//             res.send(result);
-//         }
-//     });
-// });
 
 //personal leaderboard
 app.get('/Profile/:gleId', (req, res) => {
@@ -113,4 +101,3 @@ app.post('/UserData/:nameId/:gleId', (req, res) => {
 });
 })
 
-// app.use('/:nameId/:gleId', userdata);

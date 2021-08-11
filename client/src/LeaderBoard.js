@@ -62,21 +62,21 @@ export default function LeaderBoard() {
     function DisplayBoard() {
         return(
             <Box className="Box" display="flex" flexDirection="row" justifyContent="center" >
-               <TableContainer style={{width: 600, position:"absolute"}} className="TableContainer" component={Paper}>
+               <TableContainer style={{width: 400}} className="Table" component={Paper}>
                     <Table  className="Table" aria-label="simple table">
                         <TableHead>
                         <TableRow>
                             <TableCell><b>Username</b></TableCell>
-                            <TableCell><b>WPM</b></TableCell>
+                            <TableCell style={{width:25}} ><b>WPM</b></TableCell>
                         </TableRow>
                         </TableHead>
                         <TableBody>
                             {rows.map((row) => (
-                                <TableRow key={row.id}>
+                                <TableRow key={row.id} className="rows">
                                     <TableCell component="th" scope="row">
                                     {row.username}
                                     </TableCell>
-                                    <TableCell >{row.wpm}</TableCell>
+                                    <TableCell style={{width:25}}>{row.wpm}</TableCell>
                             </TableRow>
                             ))}
                         </TableBody>
