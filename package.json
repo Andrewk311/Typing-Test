@@ -1,6 +1,7 @@
 {
   "name": "typing-project",
   "version": "0.1.0",
+  "homepage": "https://andrewk311.github.io/Typing-Test/",
   "private": true,
   "proxy": "http://localhost:3001",
   "dependencies": {
@@ -26,7 +27,9 @@
     "build": "react-scripts build",
     "serverStart": "node server.js",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build"
   },
   "eslintConfig": {
     "extends": [
