@@ -1,0 +1,21 @@
+{
+  "files": {
+    "main.css": "/Typing-Test/static/css/main.98f8bc0d.chunk.css",
+    "main.js": "/Typing-Test/static/js/main.8dc7fb1c.chunk.js",
+    "main.js.map": "/Typing-Test/static/js/main.8dc7fb1c.chunk.js.map",
+    "runtime-main.js": "/Typing-Test/static/js/runtime-main.49997384.js",
+    "runtime-main.js.map": "/Typing-Test/static/js/runtime-main.49997384.js.map",
+    "static/js/2.3f54bf23.chunk.js": "/Typing-Test/static/js/2.3f54bf23.chunk.js",
+    "static/js/2.3f54bf23.chunk.js.map": "/Typing-Test/static/js/2.3f54bf23.chunk.js.map",
+    "index.html": "/Typing-Test/index.html",
+    "static/css/main.98f8bc0d.chunk.css.map": "/Typing-Test/static/css/main.98f8bc0d.chunk.css.map",
+    "static/js/2.3f54bf23.chunk.js.LICENSE.txt": "/Typing-Test/static/js/2.3f54bf23.chunk.js.LICENSE.txt",
+    "static/media/Profile.css": "/Typing-Test/static/media/Paper-background.b9242d1a.jpg"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.49997384.js",
+    "static/js/2.3f54bf23.chunk.js",
+    "static/css/main.98f8bc0d.chunk.css",
+    "static/js/main.8dc7fb1c.chunk.js"
+  ]
+}
