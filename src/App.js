@@ -56,7 +56,7 @@ function App() {
   function sendData(){
     if (send === true){
       console.log(send);  
-      axios.post(`http://localhost:3001/UserScore/${gleId}/${calcWpm}`, {})
+      axios.post(`https://typing-project.herokuapp.com/UserScore/${gleId}/${calcWpm}`, {})
       .then((res) => {
         console.log(res);
       }, (error) => {
@@ -199,10 +199,10 @@ function App() {
     e.preventDefault(); 
     displayName();
     //search collection for username, if it passes dont add and alert it exists, if it fails add
-    axios.get(`http://localhost:3001/UsernameCheck/${name}`, {})
+    axios.get(`https://typing-project.herokuapp.com/UsernameCheck/${name}`, {})
       .then((res) => {
         if(res.data.length === 0){
-          axios.post(`http://localhost:3001/UserData/${name}/${gleId}`, {})
+          axios.post(`https://typing-project.herokuapp.com/UserData/${name}/${gleId}`, {})
           .then((res) => {
             console.log(res);
           }, (error) => {
@@ -302,7 +302,7 @@ function App() {
   );
 
   async function displayName(){
-    let res = await axios.get(`http://localhost:3001/findUser/${gleId}`)
+    let res = await axios.get(`https://typing-project.herokuapp.com/findUser/${gleId}`)
     setUsername(res.data.username);
 }
 
