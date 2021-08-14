@@ -41,14 +41,14 @@ export default function LeaderBoard() {
       }
 
     async function findUser(gleId){
-        let res = await axios.get(`http://localhost:3001/findUser/${gleId}`)
+        let res = await axios.get(`https://typing-project.herokuapp.com/findUser/${gleId}`)
         let data = res.data.username;
         return data; 
     }
     
     async function allTime(){
         if(showLeaderboard) {setShowLeaderboard(false); return}
-        let res = await axios.get(`http://localhost:3001/Leaderboard/`)
+        let res = await axios.get(`https://typing-project.herokuapp.com/Leaderboard/`)
         let tempRows = [];
         for(let i = 0; i < res.data.length; i++){
             tempRows.push(createData( await findUser(res.data[i].gleId).then((result) => {return result}), res.data[i].wpm, res.data[i]._id));
