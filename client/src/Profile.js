@@ -31,14 +31,14 @@ export default function Profile() {
     }, []);
 
     async function getUser(gleId){
-        let res = await axios.get(`http://localhost:3001/findUser/${gleId}`)
+        let res = await axios.get(`https://typing-project.herokuapp.com/findUser/${gleId}`)
         let data = res.data.username; 
         return data;
     }
 
     async function personalScores(){
         if(showLeaderboard) {setShowLeaderboard(false); return}
-        let res = await axios.get(`http://localhost:3001/Profile/${gleId}`)
+        let res = await axios.get(`https://typing-project.herokuapp.com/Profile/${gleId}`)
         let tempRows = [];
         for(let i = 0; i < res.data.length; i++){
             tempRows.push(createData(await getUser(gleId).then((result) => {return result}), res.data[i].wpm, res.data[i]._id));
